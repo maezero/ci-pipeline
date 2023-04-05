@@ -41,10 +41,12 @@ pipeline {
                         dir('ci-cd-pipeline') {
                             sh 'mv Dockerfile ./app/'                        
                         }
-
-                        dir('ci-cd-pipeline/app'){
-                            sh "docker build -t webserver:1.0.0-${BUILD_NUMBER} ."  
-                            sh "docker push zerozang/webserver:1.0.0-${BUILD_NUMBER}"  
+                        withCredentials([string(credentialsId: 'docker-hub_pass', variable: 'TOKEN')]) {
+                            dir('ci-cd-pipeline/app'){
+                                sh "docker build -t webserver:1.0.0-${BUILD_NUMBER} ."  
+                                sh "docker login -u zerozang -p $TOKEN https://hub.docker.com/"
+                                sh "docker push zerozang/webserver:1.0.0-${BUILD_NUMBER}"  
+                            }
                         }
                     }         
         }
