@@ -43,7 +43,7 @@ pipeline {
                         }
 
                         dir('ci-cd-pipeline/app'){
-                            sh 'sudo docker build .'    
+                            sh 'docker build -t ngix-mod:1.0.0-11 .'    
                         }
                     }         
         }
