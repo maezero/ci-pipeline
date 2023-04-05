@@ -35,12 +35,12 @@ pipeline {
             }
         }
 
- /*       stage('Code Build') {
+        stage('Code Build') {
             steps {
-                 sh 'mvn install -Dmaven.test.skip=true'
+                 sh 'docker'
             }
         }
-*/
+
         stage('Priting All Global Variables') {
             steps {
                 sh """
