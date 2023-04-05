@@ -43,7 +43,7 @@ pipeline {
                         }
 
                         dir('ci-cd-pipeline/app'){
-                            sh 'docker build .'    
+                            sh 'sudo docker build .'    
                         }
                     }         
         }
