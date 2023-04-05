@@ -27,12 +27,13 @@ pipeline {
 
         stage('Code Checkout') {
             steps {
-                dir('Application') {
+                dir('Applicatiom') {
                     checkout([
                         $class: 'GitSCM', 
                         branches: [[name: '*/main']], 
                         userRemoteConfigs: [[url: 'https://github.com/maezero/challenges.git']]
                     ])
+                }
             }
         }
 
