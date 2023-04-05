@@ -36,10 +36,12 @@ pipeline {
         }
 
         stage('Code Build') {
-                steps {
-                    sh 'mv ./ci-cd-pipeline/Dockerfile ./ci-cd-pipeline/app/'
-                    sh 'docker build ./ci-cd-pipeline/Dockerfile'
-                }            
+                
+                dir('ci-cd-pipeline') {
+                    steps {
+                        sh 'mv ./Dockerfile ./app/'
+                    }  
+                }          
         }
     }   
 }
