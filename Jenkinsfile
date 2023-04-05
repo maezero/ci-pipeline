@@ -1,6 +1,6 @@
 pipeline {
 
-    agent none
+    agent any
 
     options {
         buildDiscarder logRotator( 
@@ -26,7 +26,6 @@ pipeline {
         }
 
         stage('Code Checkout') {
-            agent any
 
                 steps {
                         checkout([
@@ -38,12 +37,9 @@ pipeline {
             
         }
 
-        stage('Priting All Global Variables') {
-            agent any
+        stage('Code Build') {
             steps {
-                sh """
-                env
-                """
+                sh 'mv Dockerfile ./app/'
             }
         }
 
