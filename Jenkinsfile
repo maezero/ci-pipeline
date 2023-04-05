@@ -43,8 +43,8 @@ pipeline {
                         }
 
                         dir('ci-cd-pipeline/app'){
-                            sh "docker build -t ngix-mod:1.0.0-${BUILD_NUMBER} ."  
-                            sh "docker push zerozang/webserver:ngix-mod:1.0.0-${BUILD_NUMBER}"  
+                            sh "docker build -t webserver:1.0.0-${BUILD_NUMBER} ."  
+                            sh "docker push zerozang/webserver:1.0.0-${BUILD_NUMBER}"  
                         }
                     }         
         }
