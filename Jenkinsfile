@@ -25,15 +25,16 @@ pipeline {
             }
         }
 
- //       stage('Code Checkout') {
- //           steps {
- //               checkout([
- //                   $class: 'GitSCM', 
- //                   branches: [[name: '*/master']], 
- //                   userRemoteConfigs: [[url: 'https://github.com/spring-projects/spring-petclinic.git']]
- //               ])
- //           }
- //       }
+        stage('Code Checkout') {
+            steps {
+                dir('Application') {
+                    checkout([
+                        $class: 'GitSCM', 
+                        branches: [[name: '*/main']], 
+                        userRemoteConfigs: [[url: 'https://github.com/maezero/challenges.git']]
+                    ])
+            }
+        }
 
  /*       stage('Code Build') {
             steps {
