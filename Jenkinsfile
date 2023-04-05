@@ -38,7 +38,7 @@ pipeline {
         stage('Code Build') {
                 
                     steps {
-                        dir('ci-pipeline') {
+                        dir('ci-cd-pipeline') {
                             sh 'mv Dockerfile ./app/'                        
                         }
 
