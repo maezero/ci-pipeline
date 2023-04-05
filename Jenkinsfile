@@ -39,8 +39,7 @@ pipeline {
 
         stage('Code Build') {
             steps {
-                sh 'ls -la'
-                sh 'mv Dockerfile ./app/'
+                sh 'mv ./ci-cd-pipeline/Dockerfile ./ci-cd-pipeline/app/'
             }
         }
 
