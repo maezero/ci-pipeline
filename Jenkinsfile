@@ -39,10 +39,7 @@ pipeline {
                 steps {
                     sh 'mv ./ci-cd-pipeline/Dockerfile ./ci-cd-pipeline/app/'
                     sh 'docker build ./ci-cd-pipeline/Dockerfile'
-                }
-
-            }
-            
+                }            
         }
     }   
 }
