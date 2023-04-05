@@ -1,7 +1,6 @@
 pipeline {
 
     agent any
-
     options {
         buildDiscarder logRotator( 
                     daysToKeepStr: '15', 
@@ -22,6 +21,7 @@ pipeline {
                 sh """
                 echo "Cleaned Up Workspace for ${APP_NAME}"
                 """
+                sh 'docker'
             }
         }
 
@@ -33,10 +33,6 @@ pipeline {
                             userRemoteConfigs: [[url: 'https://github.com/maezero/challenges.git']]
                         ])
                 }
-
-                steps {
-                sh 'docker'
-            }           
         }
 
 //        stage('Code Build') {
