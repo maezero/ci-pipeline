@@ -26,7 +26,6 @@ pipeline {
         }
 
         stage('Code Checkout') {
-
                 steps {
                         checkout([
                             $class: 'GitSCM', 
@@ -34,14 +33,24 @@ pipeline {
                             userRemoteConfigs: [[url: 'https://github.com/maezero/challenges.git']]
                         ])
                 }
-            
+
+                steps {
+                sh 'mv ./ci-cd-pipeline/Dockerfile ./ci-cd-pipeline/app/'
+            }           
         }
 
         stage('Code Build') {
-            steps {
-                sh 'mv ./ci-cd-pipeline/Dockerfile ./ci-cd-pipeline/app/'
+            agent {
+                // Equivalent to "docker build -f Dockerfile.build --build-arg version=1.0.2 ./build/
+                dockerfile {
+                    filename './ci-cd-pipeline/app/Dockerfile'
+                    dir './ci-cd-pipeline/app/'
+                    label 'my-image'
+                    additionalBuildArgs  '--build-arg version=1.0.2'
+                    args '-v /tmp:/tmp'
+                }
             }
+            
         }
-
     }   
 }
