@@ -27,7 +27,7 @@ pipeline {
 
         stage('Code Checkout') {
             agent any
-            dir('App'){
+
                 steps {
                         checkout([
                             $class: 'GitSCM', 
@@ -35,7 +35,7 @@ pipeline {
                             userRemoteConfigs: [[url: 'https://github.com/maezero/challenges.git']]
                         ])
                 }
-            }
+            
         }
 
         stage('Priting All Global Variables') {
