@@ -39,7 +39,11 @@ pipeline {
                 
                     steps {
                         dir('ci-pipeline') {
-                        sh 'mv ./Dockerfile ./app/'
+                            sh 'mv Dockerfile ./app/'                        
+                        }
+
+                        dir('app'){
+                            sh 'docker build .'    
                         }
                     }         
         }
