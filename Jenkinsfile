@@ -1,6 +1,6 @@
 pipeline {
 
-    agent any
+    agent none
 
     options {
         buildDiscarder logRotator( 
@@ -26,22 +26,20 @@ pipeline {
         }
 
         stage('Code Checkout') {
-            steps {
-                    checkout([
-                        $class: 'GitSCM', 
-                        branches: [[name: '*/main']], 
-                        userRemoteConfigs: [[url: 'https://github.com/maezero/challenges.git']]
-                    ])
-            }
-        }
-
-        stage('Code Build') {
-            steps {
-                 sh 'docker'
+            agent any
+            dir('App'){
+                steps {
+                        checkout([
+                            $class: 'GitSCM', 
+                            branches: [[name: '*/main']], 
+                            userRemoteConfigs: [[url: 'https://github.com/maezero/challenges.git']]
+                        ])
+                }
             }
         }
 
         stage('Priting All Global Variables') {
+            agent any
             steps {
                 sh """
                 env
