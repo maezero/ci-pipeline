@@ -39,6 +39,7 @@ pipeline {
 
         stage('Code Build') {
             steps {
+                sh 'ls -la'
                 sh 'mv Dockerfile ./app/'
             }
         }
