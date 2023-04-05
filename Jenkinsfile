@@ -42,7 +42,7 @@ pipeline {
                             sh 'mv Dockerfile ./app/'                        
                         }
 
-                        dir('app'){
+                        dir('ci-cd-pipeline/app'){
                             sh 'docker build .'    
                         }
                     }         
