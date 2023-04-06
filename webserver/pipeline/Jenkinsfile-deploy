@@ -3,7 +3,8 @@ pipeline {
     agent any
 
     parameters {
-        string(defaultValue: "123", description: 'This is a parameter', name: 'PARAMETER01')
+        string(defaultValue: "${APP_NAME}", description: 'Package Name', name: 'PackageName')
+        string(defaultValue: "X.X.X-XXX", description: 'Package Version to Deploy', name: 'PackageVersion')
     }
 
     options {
@@ -21,7 +22,7 @@ pipeline {
     stages {
         stage('Start'){
             steps{
-                    build job: 'ANOTHER_JOB_NAME', wait: false, parameters: [string(name: 'HELLO', value: String.valueOf(PARAMETER01))]
+                    sh "echo "${PackageName} ${PackageVersion} is deployed""
             }
         }
     }
