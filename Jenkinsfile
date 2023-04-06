@@ -38,8 +38,8 @@ pipeline {
                 
                     steps {
                         //### Stamp Versiom ####
-                        sh "sed -i 's/##VERSION##/"${APP_VERSION}"/g' ./ci-cd-pipeline/app/html/index.html"
-                        sh "sed -i 's/##GIT_COMMIT##/"${GIT_COMMIT}"/g' ./ci-cd-pipeline/app/html/index.html"
+                        sh "sed -i "s/##VERSION##/${APP_VERSION}/g" ./ci-cd-pipeline/app/html/index.html"
+                        sh "sed -i "s/##GIT_COMMIT##/${GIT_COMMIT}/g" ./ci-cd-pipeline/app/html/index.html"
 
                         dir('ci-cd-pipeline') {
                             sh 'mv Dockerfile ./app/'                        
