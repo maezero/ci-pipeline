@@ -1,0 +1,29 @@
+pipeline {
+
+    agent any
+
+    parameters {
+        string(defaultValue: "123", description: 'This is a parameter', name: 'PARAMETER01')
+    }
+
+    options {
+        buildDiscarder logRotator( 
+                    daysToKeepStr: '15', 
+                    numToKeepStr: '10'
+            )
+    }
+
+    environment {
+        APP_NAME = "webserver"
+        APP_VERSION = "1.0.0"
+    }
+
+    stages {
+        stage('Start'){
+            steps{
+                    build job: 'ANOTHER_JOB_NAME', wait: false, parameters: [string(name: 'HELLO', value: String.valueOf(PARAMETER01))]
+            }
+        }
+    }
+  
+}
