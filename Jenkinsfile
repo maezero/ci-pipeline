@@ -9,8 +9,8 @@ pipeline {
     }
 
     environment {
-        APP_NAME = "TEST_APP"
-        APP_ENV  = "DEV"
+        APP_NAME = "webserver"
+        APP_VERSION = "1.0.0"
     }
 
     stages {
@@ -34,15 +34,19 @@ pipeline {
                 }
         }
 
-        stage('Code Build') {
+        stage('Code Build & Stamp Version') {
                 
                     steps {
+                        //### Stamp Versiom ####
+                        sh "sed -i 's/##VERSION##/"${APP_VERSION}"/g' ./ci-cd-pipeline/app/html/index.html"
+                        sh "sed -i 's/##GIT_COMMIT##/"${GIT_COMMIT}"/g' ./ci-cd-pipeline/app/html/index.html"
+
                         dir('ci-cd-pipeline') {
                             sh 'mv Dockerfile ./app/'                        
                         }
         
                         dir('ci-cd-pipeline/app'){
-                            sh "docker build -t zerozang/webserver:1.0.0-${BUILD_NUMBER} ."  
+                            sh "docker build -t zerozang/${APP_NAME}:${APP_VERSION}-${BUILD_NUMBER} ."  
                         }
                         
                     }         
