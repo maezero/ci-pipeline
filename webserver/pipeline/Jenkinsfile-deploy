@@ -22,7 +22,7 @@ pipeline {
     stages {
         stage('Start'){
             steps{
-                    sh "echo "${PackageName} ${PackageVersion} is deployed""
+                    sh 'echo "${PackageName} ${PackageVersion} is deployed"'
             }
         }
     }
