@@ -52,17 +52,17 @@ pipeline {
                     }         
         }
 
-                stage('Push Image') {
+        stage('Push Image') {
                 
-                    steps {
-                        withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                            dir('ci-cd-pipeline/app'){
-                                sh "docker logout"
-                                sh "docker login -u $USERNAME -p $PASSWORD"
-                                sh "docker push zerozang/webserver:1.0.0-${BUILD_NUMBER}"  
-                            }
-                        }
-                    }         
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    dir('ci-cd-pipeline/app'){
+                        sh "docker logout"
+                        sh "docker login -u $USERNAME -p $PASSWORD"
+                        sh "docker push zerozang/${APP_NAME}:${APP_VERSION}-${BUILD_NUMBER}"  
+                    }
+                }
+            }         
         }
     }   
 }
