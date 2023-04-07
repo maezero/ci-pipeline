@@ -65,11 +65,9 @@ pipeline {
 
         stage('Push Image to ECR Puiblic Repo') {               
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh "aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/a9x6t2f1"
                     sh "docker tag zerozang/${APP_NAME}:${APP_VERSION}-${BUILD_NUMBER} public.ecr.aws/a9x6t2f1/${APP_NAME}:${APP_VERSION}-${BUILD_NUMBER}"
                     sh "docker push public.ecr.aws/a9x6t2f1/${APP_NAME}:${APP_VERSION}-${BUILD_NUMBER}"  
-                }
             }         
         }
     }   
