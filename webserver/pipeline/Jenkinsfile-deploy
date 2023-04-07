@@ -25,12 +25,14 @@ pipeline {
                     sh "echo '${PackageName} ${PackageVersion} is deployed'"
 
                     withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: '', contextName: '', credentialsId: 'eks-config', namespace: '', serverUrl: '']]) {
-                        withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                            sh 'docker logout'
-                            sh "docker login -u $USERNAME -p $PASSWORD"
-                            sh 'kubectl create deployment webserver --image=zerozang/webserver:1.0.14 || true'
-                            sh 'kubectl expose deployment webserver --type=LoadBalancer --port=8080 || true'   
-                        }   
+                            sh 'kubectl create deployment webserver --image=public.ecr.aws/a9x6t2f1/webserver:1.0.0-16 || true'
+                            sh 'kubectl expose deployment webserver --type=LoadBalancer --port=8080 || true' 
+//                        withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+//                            sh 'docker logout'
+//                            sh "docker login -u $USERNAME -p $PASSWORD"
+//                            sh 'kubectl create deployment webserver --image=zerozang/webserver:1.0.14 || true'
+//                            sh 'kubectl expose deployment webserver --type=LoadBalancer --port=8080 || true'   
+//                        }   
                     }
             }
         }
