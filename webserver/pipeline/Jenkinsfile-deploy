@@ -25,8 +25,8 @@ pipeline {
                     sh "echo '${PackageName} ${PackageVersion} is deployed'"
 
                     withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: '', contextName: '', credentialsId: 'eks-config', namespace: '', serverUrl: '']]) {
-                        sh 'kubectl create deployment webserver --image=zerozang/webserver:1.0.14'
-                        sh 'kubectl expose deployment webserver --type=LoadBalancer --port=8080'      
+                        sh 'kubectl create deployment webserver --image=zerozang/webserver:1.0.14 || true'
+                        sh 'kubectl expose deployment webserver --type=LoadBalancer --port=8080 || true'      
                     }
             }
         }
