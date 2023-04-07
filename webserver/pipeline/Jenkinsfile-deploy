@@ -20,9 +20,13 @@ pipeline {
     }
 
     stages {
-        stage('Start'){
+        stage('Deployment'){
             steps{
                     sh "echo '${PackageName} ${PackageVersion} is deployed'"
+
+                    withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: '', contextName: '', credentialsId: 'eks-config', namespace: '', serverUrl: '']]) {
+                        kubectl create deployment webserver --image=zerozang/webserver:1.0.14   
+                    }
             }
         }
     }
