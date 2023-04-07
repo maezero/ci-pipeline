@@ -10,7 +10,7 @@ pipeline {
     parameters {
         string(defaultValue: "webserver", description: 'Package Name', name: 'PackageName')
         string(defaultValue: "X.X.X-XXX", description: 'Package Version to Deploy', name: 'PackageVersion')
-        credentials(credentialType: 'com.cloudbees.plugins.credentials.common.StandardUsernamePasswordCredentials', name: 'eks-admin-key', required: true)
+//        credentials(credentialType: 'com.cloudbees.plugins.credentials.common.StandardUsernamePasswordCredentials', name: 'eks-admin-key', required: true)
     }
 
     options {
@@ -23,9 +23,9 @@ pipeline {
     stages {
         stage('Get credential & add to Jenkins '){
             steps{
-                withCredentials([usernamePassword(credentialsId: 'eks-admin-key', usernameVariable: '', passwordVariable: '')]) {
+/*                withCredentials([usernamePassword(credentialsId: 'eks-admin-key', usernameVariable: '', passwordVariable: '')]) {
                     sh "echo $AWS_ACCESS_KEY_ID"
-                    sh "Add to Jenkin successfully"
+*/                    sh "Add to Jenkin successfully"
                 }
             }
         }
