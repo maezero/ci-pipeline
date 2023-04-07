@@ -20,6 +20,14 @@ pipeline {
     }
 
     stages {
+        stage('Get credential & add to Jenkins '){
+            steps{
+                withCredentials([credentialsId: 'eks-admin-key']) {
+                    sh "echo $AWS_ACCESS_KEY_ID"
+                }
+            }
+        }
+
         stage('Deployment'){
             steps{
                     sh "echo '${PackageName} ${PackageVersion} is deployed'"
