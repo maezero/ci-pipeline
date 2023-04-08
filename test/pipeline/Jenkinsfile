@@ -17,7 +17,7 @@ pipeline {
         
         stage('Cleanup Workspace') { 
             agent { 
-                docker { image 'zerozang/based-image:1.0.0-6'}
+                docker { image 'zerozang/based-image:1.0.0-9'}
             }
             steps {
                 cleanWs()
@@ -29,7 +29,7 @@ pipeline {
 
         stage('Code Checkout') {
             agent { 
-                docker { image 'zerozang/based-image:1.0.0-6'}
+                docker { image 'zerozang/based-image:1.0.0-9'}
             }    
                 steps {
                         checkout([
@@ -42,7 +42,7 @@ pipeline {
 
         stage('Code Build & Stamp Version') {
             agent { 
-                docker { image 'zerozang/based-image:1.0.0-6'}
+                docker { image 'zerozang/based-image:1.0.0-9'}
             }             
                 
             steps {
@@ -63,7 +63,7 @@ pipeline {
 
         stage('Set AWS Sredential'){
             agent { 
-                docker { image 'zerozang/based-image:1.0.0-6'}
+                docker { image 'zerozang/based-image:1.0.0-9'}
             } 
 
             steps{
@@ -84,7 +84,7 @@ pipeline {
 
         stage('Push Image to Docker Hub') {
             agent { 
-                docker { image 'zerozang/based-image:1.0.0-6'}
+                docker { image 'zerozang/based-image:1.0.0-9'}
             } 
                 
             steps {
@@ -98,9 +98,9 @@ pipeline {
 
         stage('Push Image to ECR Puiblic Repo') {    
             agent { 
-                docker { image 'zerozang/based-image:1.0.0-6'}
+                docker { image 'zerozang/based-image:1.0.0-9'}
             } 
-                                   
+
             steps {
                     sh "aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/a9x6t2f1"
                     sh "docker tag zerozang/${APP_NAME}:${APP_VERSION}-${BUILD_NUMBER} public.ecr.aws/a9x6t2f1/${APP_NAME}:${APP_VERSION}-${BUILD_NUMBER}"
