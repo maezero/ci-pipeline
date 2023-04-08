@@ -1,0 +1,77 @@
+pipeline {
+
+    agent any
+
+    environment {
+        APP_NAME = "webserver"
+        APP_VERSION = "1.0.0"
+    }
+
+    parameters {
+        string(defaultValue: "webserver", description: 'Package Name', name: 'PackageName')
+        string(defaultValue: "X.X.X-XXX", description: 'Package Version to Deploy', name: 'PackageVersion')
+//        credentials(credentialType: 'com.cloudbees.plugins.credentials.common.StandardUsernamePasswordCredentials', name: 'eks-admin-key', required: true)
+    }
+
+    options {
+        buildDiscarder logRotator( 
+                    daysToKeepStr: '15', 
+                    numToKeepStr: '10'
+            )
+    }
+
+    stages {
+        stage('Set AWS Sredential'){
+            steps{
+                withCredentials([string(credentialsId: 'aws-access-key', variable: 'AWS_ACCESS_KEY')]) {
+                       
+                    sh "aws configure set aws_access_key_id ${AWS_ACCESS_KEY}"
+                }
+
+                withCredentials([string(credentialsId: 'aws-secret-key', variable: 'AWS_SECRET_KEY')]) {
+                       
+                    sh "aws configure set aws_secret_access_key ${AWS_SECRET_KEY}"
+                }   
+
+                sh "aws configure set default.region ap-southeast-1"
+
+            }
+
+        }
+        
+
+        stage('Checkout Kube YAML '){
+            steps {
+                    checkout([
+                        $class: 'GitSCM', 
+                        branches: [[name: '*/main']], 
+                        userRemoteConfigs: [[url: 'https://github.com/maezero/devops.git']]
+                    ])
+
+                    sh "sed -i 's/##APP_NAME##/${PackageName}/g' ./${PackageName}/kubernetes/deployment.yaml"
+                    sh "sed -i 's/##VERSION##/${PackageVersion}/g' ./${PackageName}/kubernetes/deployment.yaml"
+                    sh "sed -i 's/##APP_NAME##/${PackageName}/g' ./${PackageName}/kubernetes/service.yaml"
+            }
+        }
+
+        stage('Deployment'){
+            steps{
+                dir("${PackageName}/kubernetes/") {
+                    withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: '', contextName: '', credentialsId: 'eks-config', namespace: '', serverUrl: '']]) {
+                        sh "kubectl apply -f deployment.yaml"
+                        sh "kubectl apply -f service.yaml"
+//                            sh "kubectl create deployment webserver --image=public.ecr.aws/a9x6t2f1/${PackageName}:${PackageVersion} || true"
+//                            sh "kubectl expose deployment webserver --type=LoadBalancer --port=8000 || true" 
+//                        withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+//                            sh 'docker logout'
+//                            sh "docker login -u $USERNAME -p $PASSWORD"
+//                            sh 'kubectl create deployment webserver --image=zerozang/webserver:1.0.14 || true'
+//                            sh 'kubectl expose deployment webserver --type=LoadBalancer --port=8080 || true'   
+//                        }   
+                    }
+                }
+            }
+        }
+    }
+  
+}
