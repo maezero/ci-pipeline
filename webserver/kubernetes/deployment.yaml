@@ -2,19 +2,19 @@
   kind: Deployment
   metadata:
     labels:
-      app: webserver
-    name: webserver-deployment
+      app: ##APP_NAME##
+    name: ##APP_NAME##-deployment
     namespace: default
   spec:
     replicas: 2
     selector:
       matchLabels:
-        app: webserver
+        app: ##APP_NAME##
     strategy:
       spec:
         containers:
-        - name: webserver
-          image: public.ecr.aws/a9x6t2f1/webserver:1.0.0-16
+        - name: ##APP_NAME##
+          image: public.ecr.aws/a9x6t2f1/##APP_NAME##:##VERSION##
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000

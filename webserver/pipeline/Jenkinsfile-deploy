@@ -38,12 +38,16 @@ pipeline {
                         branches: [[name: '*/main']], 
                         userRemoteConfigs: [[url: 'https://github.com/maezero/devops.git']]
                     ])
+
+                    sh "sed -i 's/##APP_NAME##/${PackageName}/g' ./devops/${PackageName}/kubernetes/deployment.yaml"
+                    sh "sed -i 's/##VERSION##/${PackageVersion}/g' ./devops/${PackageName}/kubernetes/deployment.yaml"
+                    sh "sed -i 's/##APP_NAME##/${PackageName}/g' ./devops/${PackageName}/kubernetes/service.yaml"
             }
         }
 
         stage('Deployment'){
             steps{
-                dir('${PackageName}/kubernetes/') {
+                dir("devops/${PackageName}/kubernetes/") {
                     withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: '', contextName: '', credentialsId: 'eks-config', namespace: '', serverUrl: '']]) {
                         sh "kubectl apply -f deployment.yaml"
                         sh "kubectl apply -f service.yaml"

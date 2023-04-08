@@ -2,16 +2,16 @@
   kind: Service
   metadata:
     labels:
-      app: webserver
-    name: webserver-service
+      app: ##APP_NAME##
+    name: ##APP_NAME##-service
     namespace: default
   spec:
     type: LoadBalancer
     ports:
-    - name: webserver-port
+    - name: ##APP_NAME##-port
       port: 8000
       protocol: TCP
       targetPort: 8000
     selector:
-      app: webserver
+      app: ##APP_NAME##
     sessionAffinity: None
