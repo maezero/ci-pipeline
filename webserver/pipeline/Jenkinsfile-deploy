@@ -27,7 +27,7 @@ pipeline {
                     sh "echo $AWS_ACCESS_KEY_ID"
                 }
 */
-                    sh "Add to Jenkin successfully"
+                    sh "echo 'Add to Jenkin successfully'"
             }
         }
 
