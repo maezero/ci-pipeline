@@ -31,13 +31,24 @@ pipeline {
             }
         }
 
+        stage('Checkout Kube YAML '){
+            steps {
+                    checkout([
+                        $class: 'GitSCM', 
+                        branches: [[name: '*/main']], 
+                        userRemoteConfigs: [[url: 'https://github.com/maezero/devops.git']]
+                    ])
+            }
+        }
+
         stage('Deployment'){
             steps{
-                    sh "echo '${PackageName} ${PackageVersion} is deployed'"
-
+                dir('${PackageName}/kubernetes/') {
                     withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: '', contextName: '', credentialsId: 'eks-config', namespace: '', serverUrl: '']]) {
-                            sh "kubectl create deployment webserver --image=public.ecr.aws/a9x6t2f1/${PackageName}:${PackageVersion} || true"
-                            sh "kubectl expose deployment webserver --type=LoadBalancer --port=8000 || true" 
+                        sh "kubectl apply -f deployment.yaml"
+                        sh "kubectl apply -f service.yaml"
+//                            sh "kubectl create deployment webserver --image=public.ecr.aws/a9x6t2f1/${PackageName}:${PackageVersion} || true"
+//                            sh "kubectl expose deployment webserver --type=LoadBalancer --port=8000 || true" 
 //                        withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
 //                            sh 'docker logout'
 //                            sh "docker login -u $USERNAME -p $PASSWORD"
@@ -45,6 +56,7 @@ pipeline {
 //                            sh 'kubectl expose deployment webserver --type=LoadBalancer --port=8080 || true'   
 //                        }   
                     }
+                }
             }
         }
     }
