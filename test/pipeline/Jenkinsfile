@@ -1,7 +1,9 @@
 pipeline {
 
     agent { 
-        docker { image 'zerozang/based-image:1.0.0-6'}
+        docker { image 'zerozang/based-image:1.0.0-6'
+                 args '-v $HOME/.cache:/root/.cache'
+        }
     }
     options {
         buildDiscarder logRotator( 
