@@ -1,10 +1,6 @@
 pipeline {
 
-    agent { 
-        docker { image 'zerozang/based-image:1.0.0-6'
-                 args '-v $HOME/.cache:/root/.cache'
-        }
-    }
+    agent none
     options {
         buildDiscarder logRotator( 
                     daysToKeepStr: '15', 
@@ -20,6 +16,9 @@ pipeline {
     stages {
         
         stage('Cleanup Workspace') { 
+            agent { 
+                docker { image 'zerozang/based-image:1.0.0-6'}
+            }
             steps {
                 cleanWs()
                 sh """
@@ -29,6 +28,9 @@ pipeline {
         }
 
         stage('Code Checkout') {
+            agent { 
+                docker { image 'zerozang/based-image:1.0.0-6'}
+            }    
                 steps {
                         checkout([
                             $class: 'GitSCM', 
@@ -39,24 +41,31 @@ pipeline {
         }
 
         stage('Code Build & Stamp Version') {
+            agent { 
+                docker { image 'zerozang/based-image:1.0.0-6'}
+            }             
                 
-                    steps {
-                        //### Stamp Versiom ####
-                        sh "sed -i 's/##VERSION##/${APP_VERSION}-${BUILD_NUMBER}/g' ./ci-cd-pipeline/app/html/index.html"
-                        sh "sed -i 's/##GIT_COMMIT##/${GIT_COMMIT}/g' ./ci-cd-pipeline/app/html/index.html"
+            steps {
+                //### Stamp Versiom ####
+                sh "sed -i 's/##VERSION##/${APP_VERSION}-${BUILD_NUMBER}/g' ./ci-cd-pipeline/app/html/index.html"
+                sh "sed -i 's/##GIT_COMMIT##/${GIT_COMMIT}/g' ./ci-cd-pipeline/app/html/index.html"
 
-                        dir('ci-cd-pipeline') {
-                            sh 'mv Dockerfile ./app/'                        
-                        }
+                dir('ci-cd-pipeline') {
+                    sh 'mv Dockerfile ./app/'                        
+                }
         
-                        dir('ci-cd-pipeline/app'){
-                            sh "docker build -t zerozang/${APP_NAME}:${APP_VERSION}-${BUILD_NUMBER} ."  
-                        }
+                dir('ci-cd-pipeline/app'){
+                    sh "docker build -t zerozang/${APP_NAME}:${APP_VERSION}-${BUILD_NUMBER} ."  
+                }
                         
-                    }         
+            }         
         }
 
         stage('Set AWS Sredential'){
+            agent { 
+                docker { image 'zerozang/based-image:1.0.0-6'}
+            } 
+
             steps{
                 withCredentials([string(credentialsId: 'aws-access-key', variable: 'AWS_ACCESS_KEY')]) {
                        
@@ -74,6 +83,9 @@ pipeline {
         }
 
         stage('Push Image to Docker Hub') {
+            agent { 
+                docker { image 'zerozang/based-image:1.0.0-6'}
+            } 
                 
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
@@ -84,7 +96,11 @@ pipeline {
             }         
         }
 
-        stage('Push Image to ECR Puiblic Repo') {               
+        stage('Push Image to ECR Puiblic Repo') {    
+            agent { 
+                docker { image 'zerozang/based-image:1.0.0-6'}
+            } 
+                                   
             steps {
                     sh "aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/a9x6t2f1"
                     sh "docker tag zerozang/${APP_NAME}:${APP_VERSION}-${BUILD_NUMBER} public.ecr.aws/a9x6t2f1/${APP_NAME}:${APP_VERSION}-${BUILD_NUMBER}"
