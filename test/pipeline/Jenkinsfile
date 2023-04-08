@@ -1,6 +1,8 @@
 pipeline {
 
-    agent any
+    agent { 
+        docker { image 'zerozang/based-image:1.0.0-6'}
+    }
     options {
         buildDiscarder logRotator( 
                     daysToKeepStr: '15', 
@@ -9,13 +11,13 @@ pipeline {
     }
 
     environment {
-        APP_NAME = "webserver"
-        APP_VERSION = "1.0.0"
+        APP_NAME = "test"
+        APP_VERSION = "0.0.0"
     }
 
     stages {
         
-        stage('Cleanup Workspace') {
+        stage('Cleanup Workspace') { 
             steps {
                 cleanWs()
                 sh """
