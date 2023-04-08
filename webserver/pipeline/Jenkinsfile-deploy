@@ -21,15 +21,24 @@ pipeline {
     }
 
     stages {
-        stage('Get credential & add to Jenkins '){
+        stage('Set AWS Sredential'){
             steps{
-/*                withCredentials([usernamePassword(credentialsId: 'eks-admin-key', usernameVariable: '', passwordVariable: '')]) {
-                    sh "echo $AWS_ACCESS_KEY_ID"
+                withCredentials([string(credentialsId: 'aws-access-key', variable: 'AWS_ACCESS_KEY')]) {
+                       
+                    sh "aws configure set aws_access_key_id ${AWS_ACCESS_KEY}"
                 }
-*/
-                    sh "echo 'Add to Jenkin successfully'"
+
+                withCredentials([string(credentialsId: 'aws-secret-key', variable: 'AWS_SECRET_KEY')]) {
+                       
+                    sh "aws configure set aws_secret_access_key ${AWS_SECRET_KEY}"
+                }   
+
+                sh "aws configure set default.region ap-southeast-1"
+
             }
+
         }
+        
 
         stage('Checkout Kube YAML '){
             steps {
