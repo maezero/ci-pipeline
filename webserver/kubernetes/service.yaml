@@ -8,7 +8,7 @@ spec:
   selector:
     app.kubernetes.io/name: ##APP_NAME##
   ports:
-    - name: ##APP_NAME##-port
+    - name: ##APP_NAME##
       protocol: TCP
       port: 8000
       targetPort: 8000
