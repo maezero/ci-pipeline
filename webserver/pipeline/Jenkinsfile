@@ -69,7 +69,7 @@ pipeline {
             }
         }
 
-        stage('Push Image to Docker Hub') {
+/*        stage('Push Image to Docker Hub') {
                 
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
@@ -79,7 +79,7 @@ pipeline {
                 }
             }         
         }
-
+*/
         stage('Push Image to ECR Puiblic Repo') {               
             steps {
                     sh "aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/a9x6t2f1"
