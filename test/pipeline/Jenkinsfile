@@ -82,7 +82,7 @@ pipeline {
             }
         }
 
-        stage('Push Image to Docker Hub') {
+/*        stage('Push Image to Docker Hub') {
             agent { 
                 docker { image 'zerozang/based-image:1.0.0-9'}
             } 
@@ -95,7 +95,7 @@ pipeline {
                 }
             }         
         }
-
+*/
         stage('Push Image to ECR Puiblic Repo') {    
             agent { 
                 docker { image 'zerozang/based-image:1.0.0-9'}
